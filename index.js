@@ -9,7 +9,13 @@ app.get("/", (req, res) => {
 });
 
 app.post("/callback", (req, res) => {
-  console.log("LINE webhook:", req.body);
+  const events = req.body.events;
+
+  if (events && events.length > 0) {
+    const text = events[0].message.text;
+    console.log("User message:", text);
+  }
+
   res.status(200).send("OK");
 });
 

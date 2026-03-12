@@ -3,7 +3,7 @@ const express = require("express");
 const app = express();
 app.use(express.json());
 
-const CHANNEL_ACCESS_TOKEN = "你的ChannelAccessToken放在這裡";
+const CHANNEL_ACCESS_TOKEN = "KVRl754l9C8OQiAeokroNLVSkX7d5g/N1tENkTPQkJA89uB9n/+rIsa2LvmHKjOMaATE+XLj2QnxmRRnao+a822lUY689ENqnEF14WW1yyHnVgHPPOVmNaqSJT8i6DCn1WwQcmmehvEeHLCWJ0XHgwdB04t89/1O/w1cDnyilFU=";
 
 app.get("/", (req, res) => {
   res.send("LINE bot is running");

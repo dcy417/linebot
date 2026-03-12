@@ -1,8 +1,9 @@
 const express = require("express");
 
 const app = express();
-
 app.use(express.json());
+
+const CHANNEL_ACCESS_TOKEN = "你的ChannelAccessToken放在這裡";
 
 app.get("/", (req, res) => {
   res.send("LINE bot is running");
@@ -10,40 +11,55 @@ app.get("/", (req, res) => {
 
 app.post("/callback", async (req, res) => {
 
-  const events = req.body.events;
+  try {
 
-  if (events && events.length > 0) {
+    const events = req.body.events;
+
+    if (!events || events.length === 0) {
+      return res.status(200).send("OK");
+    }
 
     const event = events[0];
-    const text = event.message.text;
+
+    if (event.type !== "message" || event.message.type !== "text") {
+      return res.status(200).send("OK");
+    }
+
+    const userText = event.message.text;
     const replyToken = event.replyToken;
 
-    console.log("User message:", text);
+    console.log("User message:", userText);
 
     await fetch("https://api.line.me/v2/bot/message/reply", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer YOUR_CHANNEL_ACCESS_TOKEN"
+        "Authorization": `Bearer ${CHANNEL_ACCESS_TOKEN}`
       },
       body: JSON.stringify({
         replyToken: replyToken,
         messages: [
           {
             type: "text",
-            text: "你剛剛說的是：" + text
+            text: "你剛剛說：" + userText
           }
         ]
       })
     });
 
+    res.status(200).send("OK");
+
+  } catch (error) {
+
+    console.error("Error:", error);
+    res.status(200).send("Error");
+
   }
 
-  res.status(200).send("OK");
 });
 
 const PORT = process.env.PORT || 8080;
 
 app.listen(PORT, "0.0.0.0", () => {
-  console.log("Server running on port " + PORT);
+  console.log(`Server running on port ${PORT}`);
 });

@@ -9,12 +9,7 @@ app.get("/", (req, res) => {
 });
 
 app.post("/callback", (req, res) => {
-  const events = req.body.events;
-
-  if (events && events.length > 0) {
-    const text = events[0].message.text;
-    console.log("User message:", text);
-  }
+  console.log("Webhook body:", JSON.stringify(req.body));
 
   res.status(200).send("OK");
 });
